@@ -31,11 +31,9 @@ function nextGen() {
 
     for (let y in pixels) {
         for (let x in pixels[y]) {
-            let col
-            if (pixels[y][x] >= colours.length) col = colours[colours.length - 1]
-            else col = colours[pixels[y][x]]
-
+            const col = colours[pixels[y][x]] || colours[colours.length - 1]
             const pix = (y * pixels[y].length + +x) * 4
+
             imgData.data[pix] = col[0]
             imgData.data[pix + 1] = col[1]
             imgData.data[pix + 2] = col[2]

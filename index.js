@@ -1,16 +1,15 @@
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 
-let pixels = [...Array(canvas.height)].map(e => Array(canvas.width).fill(0))
-let newPixels = [...Array(canvas.height)].map(e => Array(canvas.width).fill(0))
-
 const imgData = ctx.createImageData(canvas.width, canvas.height)
-
 const maxGrains = 3
 const dirToCheck = [[0, -1], [0, 1], [-1, 0], [1, 0]]
 const colours = [[237, 191, 198], [175, 141, 134], [95, 72, 66], [67, 46, 54], [38, 12, 26]]
 
-pixels[Math.floor(canvas.height / 2)][Math.floor(canvas.width / 2)] = 100000
+let pixels = [...Array(Math.ceil(canvas.height / 2))].map(e => Array(Math.ceil(canvas.width / 2)).fill(0))
+let newPixels = [...Array(Math.ceil(canvas.height / 2))].map(e => Array(Math.ceil(canvas.width / 2)).fill(0))
+
+pixels[pixels.length - 1][pixels[0].length - 1] = 1000000
 
 function nextGen() {
     for (let y = 0; y < pixels.length; y++) {
@@ -29,10 +28,17 @@ function nextGen() {
     pixels = newPixels
     newPixels = temp
 
-    for (let y in pixels) {
-        for (let x in pixels[y]) {
-            const col = colours[pixels[y][x]] || colours[colours.length - 1]
-            const pix = (y * pixels[y].length + +x) * 4
+    for (let y = 0; y < canvas.height; y++) {
+        let offset = pixels[y] === undefined
+        const indexY = !offset ? y : canvas.height - y - 2
+        for (let x = 0; x < canvas.width; x++) {
+            offset = offset || pixels[indexY][x]
+            const indexX = pixels[indexY] ? (pixels[indexY][x] !== undefined ? x : canvas.width - x - 2) : 0
+
+            let col
+            if (pixels[indexY] && pixels[indexX]) col = colours[pixels[indexY][indexX]] || colours[colours.length - 1]
+            else col = colours[0]
+            const pix = (y * imgData.width + x) * 4
 
             imgData.data[pix] = col[0]
             imgData.data[pix + 1] = col[1]
@@ -40,13 +46,13 @@ function nextGen() {
             imgData.data[pix + 3] = 255
         }
     }
-
     ctx.putImageData(imgData, 0, 0)
 }
 
 function run() {
-    for (let i = 0; i < 10; i++) nextGen()
-    requestAnimationFrame(run)
+    nextGen()
+    // for (let i = 0; i < 5; i++) nextGen()
+    // requestAnimationFrame(run)
 }
 
 run()

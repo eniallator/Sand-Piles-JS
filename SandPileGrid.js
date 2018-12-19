@@ -1,7 +1,7 @@
 class SandPileGrid {
     constructor(startAmount, offsetX, offsetY) {
         this._grid = [[startAmount]]
-        this.offset = { x: offsetX, y: offsetY }
+        this._offset = { x: offsetX, y: offsetY }
     }
 
     getYLength() {
@@ -13,19 +13,15 @@ class SandPileGrid {
     }
 
     set(y, x, val) {
-        if (x < 0 || y < 0 || x > this.offset.x || y > this.offset.y) return
+        if (x < 0 || y < 0 || x > this._offset.x || y > this._offset.y) return
 
-        if (y >= this._grid.length) {
-            for (let i = this._grid.length; i <= y; i++) {
-                this._grid.push(Array(this._grid[0].length).fill(0))
-            }
+        for (let i = this._grid.length; i <= y; i++) {
+            this._grid.push(Array(this._grid[0].length).fill(0))
         }
 
-        if (x >= this._grid[y].length) {
-            for (let i = 0; i < this._grid.length; i++) {
-                for (let j = this._grid.length; j <= x; j++) {
-                    this._grid[i].push(0)
-                }
+        for (let i = 0; i < this._grid.length; i++) {
+            for (let j = this._grid[i].length; j <= x; j++) {
+                this._grid[i].push(0)
             }
         }
 
@@ -40,6 +36,6 @@ class SandPileGrid {
     }
 
     getDrawVals(y, x) {
-        return this.get(this.offset.x - x, this.offset.y - y)
+        return this.get(this._offset.y - y, this._offset.x - x)
     }
 }

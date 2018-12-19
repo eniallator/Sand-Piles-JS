@@ -10,7 +10,7 @@ const mid = { x: Math.ceil(canvas.width / 2), y: Math.ceil(canvas.height / 2) }
 let pixels = new SandPileGrid(1000000, mid.x, mid.y)
 let newPixels = new SandPileGrid(1000000, mid.x, mid.y)
 
-function nextGen() {
+function update() {
     for (let y = 0; y < pixels.getYLength(); y++) {
         for (let x = 0; x < pixels.getXLength(); x++) {
             const oldVal = pixels.get(y, x)
@@ -27,7 +27,9 @@ function nextGen() {
     const temp = pixels
     pixels = newPixels
     newPixels = temp
+}
 
+function draw() {
     for (let y = 0; y < canvas.height; y++) {
         for (let x = 0; x < canvas.width; x++) {
             const col = colours[pixels.getDrawVals(y, x)] || colours[colours.length - 1]
@@ -43,7 +45,8 @@ function nextGen() {
 }
 
 function run() {
-    for (let i = 0; i < 5; i++) nextGen()
+    for (let i = 0; i < 5; i++) update()
+    draw()
     requestAnimationFrame(run)
 }
 

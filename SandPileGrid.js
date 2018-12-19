@@ -1,7 +1,7 @@
 class SandPileGrid {
-    constructor(startAmount, drawOffsetX, drawOffsetY) {
+    constructor(startAmount, offsetX, offsetY) {
         this._grid = [[startAmount]]
-        this.drawOffset = { x: drawOffsetX, y: drawOffsetY }
+        this.offset = { x: offsetX, y: offsetY }
     }
 
     getYLength() {
@@ -13,7 +13,7 @@ class SandPileGrid {
     }
 
     set(y, x, val) {
-        if (x < 0 || y < 0) return
+        if (x < 0 || y < 0 || x > this.offset.x || y > this.offset.y) return
 
         if (y >= this._grid.length) {
             for (let i = this._grid.length; i <= y; i++) {
@@ -40,6 +40,6 @@ class SandPileGrid {
     }
 
     getDrawVals(y, x) {
-        return this.get(this.drawOffset.x - x, this.drawOffset.y - y)
+        return this.get(this.offset.x - x, this.offset.y - y)
     }
 }

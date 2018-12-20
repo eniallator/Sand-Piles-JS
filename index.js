@@ -6,27 +6,29 @@ const maxGrains = 3
 const dirToCheck = [[0, -1], [0, 1], [-1, 0], [1, 0]]
 const colours = [[237, 191, 198], [175, 141, 134], [95, 72, 66], [67, 46, 54], [38, 12, 26]]
 
-const mid = { x: Math.ceil(canvas.width / 2), y: Math.ceil(canvas.height / 2) }
+const mid = { x: Math.ceil(imgData.width / 2), y: Math.ceil(imgData.height / 2) }
+
 let pixels = new SandPileGrid(1000000, mid.x, mid.y)
-let newPixels = new SandPileGrid(1000000, mid.x, mid.y)
 
 function update() {
+    const newPixels = new SandPileGrid(1000000, mid.x, mid.y)
+
     for (let y = 0; y < pixels.getYLength(); y++) {
-        for (let x = 0; x < pixels.getXLength(); x++) {
-            const oldVal = pixels.get(y, x)
-            if (oldVal > maxGrains) {
-                newPixels.set(y, x, oldVal - 4)
+        for (let x = 0; x <= y; x++) {
+            if (pixels.get(y, x) > maxGrains) {
+                newPixels.set(y, x, newPixels.get(y, x) + pixels.get(y, x) - 4)
 
                 for (let dir of dirToCheck) {
-                    newPixels.set(y + dir[0], x + dir[1], newPixels.get(y + dir[0], x + dir[1]) + 1)
+                    let val = newPixels.get(y + dir[0], x + dir[1]) + 1
+                    if (y + dir[0] < 1 && y > 0) val++
+
+                    newPixels.set(y + dir[0], x + dir[1], val)
                 }
-            }
+            } else newPixels.set(y, x, newPixels.get(y, x) + pixels.get(y, x))
         }
     }
 
-    const temp = pixels
     pixels = newPixels
-    newPixels = temp
 }
 
 function draw() {
@@ -45,7 +47,7 @@ function draw() {
 }
 
 function run() {
-    for (let i = 0; i < 5; i++) update()
+    for (let i = 0; i < 10; i++) update()
     draw()
     requestAnimationFrame(run)
 }

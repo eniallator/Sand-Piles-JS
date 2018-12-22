@@ -29,11 +29,11 @@ function validateColour(strCol) {
 const paramRegex = /[?&]?([^=]+)=([^&]*)/g
 let tokens
 while ((tokens = paramRegex.exec(document.location.search))) {
-    const index = Number(tokens[1])
-    const strCol = tokens[2]
+    const index = Number(decodeURIComponent(tokens[1]))
+    const strCol = decodeURIComponent(tokens[2])
 
     const validatedColour = validateColour(strCol)
-    const validatedIndex = !isNaN(index) && String(index).indexOf('.') === -1 && index > 0
+    const validatedIndex = !isNaN(index) && String(index).indexOf('.') === -1 && index >= 0
 
     if (validatedIndex && validatedColour) colours[index] = validatedColour
 }

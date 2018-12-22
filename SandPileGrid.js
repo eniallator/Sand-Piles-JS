@@ -36,6 +36,6 @@ class SandPileGrid {
     }
 
     getDrawVals(y, x) {
-        return this.get(this._offset.y - y, this._offset.x - x)
+        return this.get(this.getYLength() - y, this.getYLength() - x)
     }
 }

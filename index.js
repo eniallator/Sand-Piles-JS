@@ -32,11 +32,11 @@ function update() {
 }
 
 function draw() {
-    for (let y = 0; y < canvas.height; y++) {
-        for (let x = 0; x < canvas.width; x++) {
-            const col = colours[pixels.getDrawVals(y, x)] || colours[colours.length - 1]
+    const pixelDim = imgData.height / (pixels.getYLength() * 2 + 1)
+    for (let y = 0; y < imgData.height; y++) {
+        for (let x = 0; x < imgData.width; x++) {
+            const col = colours[pixels.getDrawVals(Math.floor(y / pixelDim), Math.floor(x / pixelDim))] || colours[colours.length - 1]
             const pix = (y * imgData.width + x) * 4
-
             imgData.data[pix] = col[0]
             imgData.data[pix + 1] = col[1]
             imgData.data[pix + 2] = col[2]

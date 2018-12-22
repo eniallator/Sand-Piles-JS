@@ -1,13 +1,20 @@
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 
+const iterRange = document.getElementById('iterRange')
+const iterOutput = document.getElementById('iterOutput')
+iterOutput.innerHTML = iterRange.value
+
+iterRange.oninput = () => {
+    iterOutput.innerHTML = iterRange.value
+}
+
 const imgData = ctx.createImageData(canvas.width, canvas.height)
 const maxGrains = 3
 const dirToCheck = [[0, -1], [0, 1], [-1, 0], [1, 0]]
 const colours = [[237, 191, 198], [175, 141, 134], [95, 72, 66], [67, 46, 54], [38, 12, 26]]
 
 const mid = { x: Math.ceil(imgData.width / 2), y: Math.ceil(imgData.height / 2) }
-
 let pixels = new SandPileGrid(1000000, mid.x, mid.y)
 
 function update() {
@@ -47,7 +54,7 @@ function draw() {
 }
 
 function run() {
-    for (let i = 0; i < 10; i++) update()
+    for (let i = 0; i < iterRange.value; i++) update()
     draw()
     requestAnimationFrame(run)
 }

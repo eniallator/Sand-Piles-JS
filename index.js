@@ -47,10 +47,6 @@ for (let i in defaultColours) {
     )
 }
 
-const imgData = ctx.createImageData(canvas.width, canvas.height)
-const maxGrains = 3
-const dirToCheck = [[0, -1], [0, 1], [-1, 0], [1, 0]]
-
 function validateColour(strCol) {
     return strCol.toLowerCase().match(/^[\da-f]{6}$/) && hexToRGB(strCol)
 }
@@ -69,6 +65,11 @@ while ((tokens = paramRegex.exec(document.location.search))) {
         colours[index] = validatedColour
     }
 }
+
+const imgData = ctx.createImageData(canvas.width, canvas.height)
+const maxGrains = 3
+const dirToCheck = [[0, -1], [0, 1], [-1, 0], [1, 0]]
+let iterNum = 0
 
 const mid = { x: Math.ceil(imgData.width / 2), y: Math.ceil(imgData.height / 2) }
 let pixels = new SandPileGrid(1000000, mid.x, mid.y)
@@ -92,6 +93,7 @@ function update() {
     }
 
     pixels = newPixels
+    iterNum++
 }
 
 function draw() {
@@ -107,6 +109,9 @@ function draw() {
         }
     }
     ctx.putImageData(imgData, 0, 0)
+    const size = 12
+    ctx.font = size + 'px Arial'
+    ctx.fillText('Iterations: ' + iterNum, 5, size)
 }
 
 function run() {

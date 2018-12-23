@@ -15,15 +15,14 @@ const dirToCheck = [[0, -1], [0, 1], [-1, 0], [1, 0]]
 
 let colours = [[237, 191, 198], [175, 141, 134], [95, 72, 66], [67, 46, 54], [38, 12, 26]]
 
+function hexToRGB(hex) {
+    const match = hex.toLowerCase().match(/^#?([\da-f]{2})([\da-f]{2})([\da-f]{2})$/)
+    if (!match) return false
+    return [parseInt(match[1], 16), parseInt(match[2], 16), parseInt(match[3], 16)]
+}
+
 function validateColour(strCol) {
-    try {
-        const col = JSON.parse(strCol)
-        if (col.length !== 3) return false
-        for (let n of col) if (String(n).indexOf('.') !== -1 || n < 0 || n > 255) return false
-        return col
-    } catch (SyntaxError) {
-        return false
-    }
+    return strCol.toLowerCase().match(/^[\da-f]{6}$/) && hexToRGB(strCol)
 }
 
 const paramRegex = /[?&]?([^=]+)=([^&]*)/g

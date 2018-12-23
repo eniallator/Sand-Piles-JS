@@ -15,6 +15,8 @@ function hexToRGB(hex) {
     return [parseInt(match[1], 16), parseInt(match[2], 16), parseInt(match[3], 16)]
 }
 
+const RGBToHex = RGB => RGB.reduce((acc, n) => acc + (n < 16 ? '0' : '') + n.toString(16), '')
+
 const colourElements = [
     document.getElementById('colour0'),
     document.getElementById('colour1'),
@@ -32,6 +34,14 @@ for (let i in defaultColours) {
         'input',
         ev => {
             colours[i] = hexToRGB(colourElements[i].value)
+            const match = window.location.href.match(/^.*\?/)
+            const pageURL = match ? match[0] : window.location.href + '?'
+            const URIParams = colours.reduce((acc, col, i) => {
+                const hexCol = RGBToHex(col)
+                if (defaultColours[i] === hexCol) return acc
+                return acc + (acc !== '' ? '&' : '') + i + '=' + hexCol
+            }, '')
+            history.pushState({}, document.title, pageURL + URIParams)
         },
         false
     )

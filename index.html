@@ -5,13 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Sand Piles</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
   </head>
 
   <body>
     <canvas id="canvas" width="500" height="500"></canvas>
-    <div>
-      <input type="range" id="iterRange" min="1" max="50" value="1" />
-      <p>Iterations per draw: <span id="iterOutput"></span></p>
+    <div id="input">
+      <div class="grey-bg">
+        <p>Iterations per draw: <span id="iterOutput"></span></p>
+        <input type="range" id="iterRange" min="1" max="50" value="1" />
+      </div>
+      <div id="colourPickers">
+        <div class="grey-bg">
+          <p>Colour 0:</p>
+          <input type="color" id="colour0" />
+        </div>
+        <div class="grey-bg">
+          <p>Colour 1:</p>
+          <input type="color" id="colour1" />
+        </div>
+        <div class="grey-bg">
+          <p>Colour 2:</p>
+          <input type="color" id="colour2" />
+        </div>
+        <div class="grey-bg">
+          <p>Colour 3:</p>
+          <input type="color" id="colour3" />
+        </div>
+        <div class="grey-bg">
+          <p>Colour 4:</p>
+          <input type="color" id="colour4" />
+        </div>
+      </div>
     </div>
     <script src="SandPileGrid.js"></script>
     <script src="index.js"></script>

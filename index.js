@@ -9,17 +9,37 @@ iterRange.oninput = () => {
     iterOutput.innerHTML = iterRange.value
 }
 
-const imgData = ctx.createImageData(canvas.width, canvas.height)
-const maxGrains = 3
-const dirToCheck = [[0, -1], [0, 1], [-1, 0], [1, 0]]
-
-let colours = [[237, 191, 198], [175, 141, 134], [95, 72, 66], [67, 46, 54], [38, 12, 26]]
-
 function hexToRGB(hex) {
     const match = hex.toLowerCase().match(/^#?([\da-f]{2})([\da-f]{2})([\da-f]{2})$/)
     if (!match) return false
     return [parseInt(match[1], 16), parseInt(match[2], 16), parseInt(match[3], 16)]
 }
+
+const colourElements = [
+    document.getElementById('colour0'),
+    document.getElementById('colour1'),
+    document.getElementById('colour2'),
+    document.getElementById('colour3'),
+    document.getElementById('colour4')
+]
+const defaultColours = ['edbfc6', 'af8d86', '5f4842', '432e36', '260c1a']
+let colours = []
+for (let i in defaultColours) {
+    const col = defaultColours[i]
+    colours.push(hexToRGB(col))
+    colourElements[i].value = '#' + col
+    colourElements[i].addEventListener(
+        'input',
+        ev => {
+            colours[i] = hexToRGB(colourElements[i].value)
+        },
+        false
+    )
+}
+
+const imgData = ctx.createImageData(canvas.width, canvas.height)
+const maxGrains = 3
+const dirToCheck = [[0, -1], [0, 1], [-1, 0], [1, 0]]
 
 function validateColour(strCol) {
     return strCol.toLowerCase().match(/^[\da-f]{6}$/) && hexToRGB(strCol)
@@ -34,7 +54,10 @@ while ((tokens = paramRegex.exec(document.location.search))) {
     const validatedColour = validateColour(strCol)
     const validatedIndex = !isNaN(index) && String(index).indexOf('.') === -1 && index >= 0
 
-    if (validatedIndex && validatedColour) colours[index] = validatedColour
+    if (validatedIndex && validatedColour) {
+        if (colourElements[index]) colourElements[index].value = '#' + strCol
+        colours[index] = validatedColour
+    }
 }
 
 const mid = { x: Math.ceil(imgData.width / 2), y: Math.ceil(imgData.height / 2) }
@@ -67,9 +90,9 @@ function draw() {
         for (let x = 0; x < imgData.width; x++) {
             const col = colours[pixels.getDrawVals(Math.floor(y / pixelDim), Math.floor(x / pixelDim))] || colours[colours.length - 1]
             const pix = (y * imgData.width + x) * 4
-            imgData.data[pix] = col && col[0] ? col[0] : 255
-            imgData.data[pix + 1] = col && col[1] ? col[1] : 255
-            imgData.data[pix + 2] = col && col[2] ? col[2] : 255
+            imgData.data[pix] = col && !isNaN(col[0]) ? col[0] : 255
+            imgData.data[pix + 1] = col && !isNaN(col[1]) ? col[1] : 255
+            imgData.data[pix + 2] = col && !isNaN(col[2]) ? col[2] : 255
             imgData.data[pix + 3] = 255
         }
     }
